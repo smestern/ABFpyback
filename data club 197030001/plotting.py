@@ -1,6 +1,8 @@
 import pyabf
 import pyabf.plot
-
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import tkinter as tk
 from tkinter import filedialog
 
