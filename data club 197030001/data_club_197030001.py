@@ -1,34 +1,94 @@
-
+import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import pyabf
 import time
 
 abf = pyabf.ABF("19703008.abf")
-plt.figure(figsize=(10, 8))
+#plt.figure(figsize=(10, 8))
 plt.ion()
 
 cm = plt.get_cmap("Set1")
 colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
-plt.gca().axis('off') # hide axes to enhance floating effect
+#plt.gca().axis('on') # hide axes to enhance floating effect
+#plt.autoscale(False)
+#plt.xlim(0, 3)
+#plt.ylim(-100, 50)
+
+sweepNumber=4
+
+abf.setSweep(4)
+
+i1, i2 = 0, 1 # plot part of the sweep
+dataX = abf.sweepX[i1:i2] # + .25 * sweepNumber
+dataY = abf.sweepY[i1:i2]  # + 100 * sweepNumber
+
+framestodisplay = int((abf.dataPointsPerMs * 3500) / 100)
+
+fig, ax = plt.subplots()
+xdata, ydata = [], []
+ln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
+lstframe = 0
+plt.pause(1)
+
+def init():
+    ax.set_xlim(0, 3)
+    ax.set_ylim(-100, 50)
+    return ln,
+
+def update(i):
+    global lstframe
+    global abf
+    global sweepNumber
+    i1, i2 = 0, (i * 100)
+    if i >= (framestodisplay - 1):
+        print(i2)
+        print (i)
+        print(abf.sweepPointCount)
+        
+        i = 0
+        if sweepNumber < (abf.sweepCount - 1):
+            sweepNumber += 1
+            abf.setSweep(sweepNumber)
+            print(sweepNumber)
+        else:
+            sweepNumber = 0
+            abf.setSweep(sweepNumber)
+            print(sweepNumber)
+      
+    
+    ln.set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
+    lstframe = i2
+    return ln,
+
+
+
+ani = animation.FuncAnimation(
+    fig, update, init_func=init, frames=framestodisplay, interval=2, blit=True, save_count=50)
+lstframe = 0
+
 
 
 
 plt.show()
-for sweepNumber in abf.sweepList:
-    
-        if (sweepNumber <= 7 & sweepNumber > 1):
-            abf.setSweep(sweepNumber)
-            j = 0
-            k = abf.sweepPointCount
-            while j <= k:
-                    plt.pause(0.001)
-                    print(j)
-                    i1, i2 = 0, j # plot part of the sweep
-                    dataX = abf.sweepX[i1:i2] + .25 * sweepNumber
-                    dataY = abf.sweepY[i1:i2] + 100 * sweepNumber
-                    plt.plot(dataX, dataY, color=colors[sweepNumber], alpha=.5)
-                    j += 1000
-      
-        
-    
-plt.ioff()  
+
+plt.pause(1000)
+#for sweepNumber in abf.sweepList:
+#        plt.Figure.clear
+#        if (sweepNumber <= 7 & sweepNumber > 1):
+ #           abf.setSweep(sweepNumber + 1)
+  #          j = 0
+   #         k = abf.sweepPointCount
+    #        while j <= k:
+     #               plt.pause(0.001)
+      #              print(j)
+       #             print("of")
+        #            print(k)
+         #           i1, i2 = 0, j # plot part of the sweep
+          #          dataX = abf.sweepX[i1:i2] # + .25 * sweepNumber
+           #         dataY = abf.sweepY[i1:i2]  # + 100 * sweepNumber
+            #        plt.plot(dataX, dataY, color=colors[sweepNumber], alpha=.5)
+             #       j += int(k * 0.10)
+
+
+
