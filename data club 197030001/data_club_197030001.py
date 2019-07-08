@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import pyabf
+from matplotlib.animation import FFMpegWriter
 import time
 
 abf = pyabf.ABF("19703008.abf")
@@ -15,9 +16,9 @@ colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
 #plt.xlim(0, 3)
 #plt.ylim(-100, 50)
 
-sweepNumber=4
+sweepNumber=0
 
-abf.setSweep(4)
+abf.setSweep(0)
 
 i1, i2 = 0, 1 # plot part of the sweep
 dataX = abf.sweepX[i1:i2] # + .25 * sweepNumber
@@ -64,7 +65,7 @@ def update(i):
 
 
 ani = animation.FuncAnimation(
-    fig, update, init_func=init, frames=framestodisplay, interval=2, blit=True, save_count=50)
+    fig, update, init_func=init, frames=framestodisplay, interval=0.005, blit=True, save_count=50)
 lstframe = 0
 
 
@@ -72,6 +73,8 @@ lstframe = 0
 
 plt.show()
 
+#writer = FFMpegWriter(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+#ani.save("movie.mp4")
 plt.pause(1000)
 #for sweepNumber in abf.sweepList:
 #        plt.Figure.clear
