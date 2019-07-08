@@ -16,16 +16,17 @@ colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
 #plt.xlim(0, 3)
 #plt.ylim(-100, 50)
 
-sweepNumber=3
+sweepNumber=0
 
-abf.setSweep(3)
+abf.setSweep(sweepNumber)
 
 i1, i2 = 0, 1 # plot part of the sweep
 dataX = abf.sweepX[i1:i2] # + .25 * sweepNumber
 dataY = abf.sweepY[i1:i2]  # + 100 * sweepNumber
 
 framestodisplay = int((abf.dataPointsPerMs * 3000) / 100)
-
+print(abf.dataPointsPerMs)
+print(abf.dataRate)
 fig, ax = plt.subplots()
 xdata, ydata = [], []
 ln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
@@ -62,6 +63,7 @@ def update(i):
     ln.set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
     ln.set_color(colors[sweepNumber])
     lstframe = i2
+   # print(ani.frame_seq)
     return ln,
 
 
@@ -70,7 +72,7 @@ ani = animation.FuncAnimation(
     fig, update, init_func=init, frames=framestodisplay, interval=0.001, blit=True, save_count=50)
 lstframe = 0
 
-
+print(ani.frame_seq)
 
 
 plt.show()
