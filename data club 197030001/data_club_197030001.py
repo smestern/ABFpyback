@@ -4,8 +4,16 @@ import matplotlib.animation as animation
 import pyabf
 from matplotlib.animation import FFMpegWriter
 import time
+import tkinter as tk
+from tkinter import filedialog
 
-abf = pyabf.ABF("19703008.abf")
+root = tk.Tk()
+root.withdraw()
+
+file_path = filedialog.askopenfilename()
+
+
+abf = pyabf.ABF(file_path)
 #plt.figure(figsize=(10, 8))
 plt.ion()
 
@@ -32,6 +40,8 @@ xdata, ydata = [], []
 ln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
 lstframe = 0
 plt.pause(1)
+plt.ylabel(abf.sweepLabelY)
+plt.xlabel(abf.sweepLabelX)
 
 def init():
     ax.set_xlim(0, 3)

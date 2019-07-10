@@ -14,7 +14,7 @@ file_path = filedialog.askopenfilename()
 
 abf = pyabf.ABF(file_path)
 pyabf.plot.sweeps(abf, title=False, 
-    offsetXsec=.1, offsetYunits=20, startAtSec=0, endAtSec=1.5)
+    offsetXsec=.1, offsetYunits=20, startAtSec=0, endAtSec=2)
 pyabf.plot.scalebar(abf, hideFrame=True)
 plt.tight_layout()
 plt.show()

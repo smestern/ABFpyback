@@ -22,7 +22,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="data_club_197030001.py" />
-    <Compile Include="plotting.py" />
+    <Compile Include="3dplotting.py" />
+    <Compile Include="Plot1traceotherwise gray.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="simple_anim.py" />
     <Compile Include="strip_chart.py" />
   </ItemGroup>
