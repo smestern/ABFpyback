@@ -13,8 +13,24 @@ file_path = filedialog.askopenfilename()
 
 
 abf = pyabf.ABF(file_path)
-pyabf.plot.sweeps(abf, title=False, 
-    offsetXsec=.1, offsetYunits=20, startAtSec=0, endAtSec=2)
-pyabf.plot.scalebar(abf, hideFrame=True)
-plt.tight_layout()
+
+
+# use a custom colormap to create a different color for every sweep
+cm = plt.get_cmap("winter")
+colors = [cm(x/abf.sweepCount) for x in abf.sweepList]
+#colors.reverse()
+sweepsNumbers = [1, 4, 5, 6, 7, 8]
+i = 1
+plt.figure(figsize=(10, 6))
+for sweepNumber in sweepsNumbers:
+    abf.setSweep(sweepNumber)
+    
+    i1, i2 = 0, int(abf.dataRate * 2)
+    dataX = abf.sweepX[i1:i2] + 0.5 * i
+    dataY = abf.sweepY[i1:i2] + 30 * i
+    i += 1
+    plt.plot(dataX, dataY, color=colors[sweepNumber], alpha=.5)
+
+plt.gca().axis('off')
+plt.show()
 plt.show()

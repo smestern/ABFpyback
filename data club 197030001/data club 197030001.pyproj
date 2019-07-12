@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>e783c33c-acb0-468e-8d37-55911ceba3cc</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>data_club_197030001.py</StartupFile>
+    <StartupFile>ABFplayback.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="data_club_197030001.py" />
+    <Compile Include="ABFplayback.py" />
     <Compile Include="3dplotting.py" />
     <Compile Include="Plot1traceotherwise gray.py">
       <SubType>Code</SubType>

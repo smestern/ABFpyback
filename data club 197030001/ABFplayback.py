@@ -24,7 +24,7 @@ colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
 #plt.xlim(0, 3)
 #plt.ylim(-100, 50)
 
-sweepNumber=0
+sweepNumber=4
 
 abf.setSweep(sweepNumber)
 
