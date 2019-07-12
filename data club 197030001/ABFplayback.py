@@ -21,31 +21,41 @@ plt.ion()
 #### EASY SETTINGS ######
 cm = plt.get_cmap("Set1") #Changes colour based on sweep number
 colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
+sweepNumber=4 #this is the first sweep that is printed, change this if needed
+Xsecupperlim = 3 #this is the upper bound of the x axis. try to change this variable and not the others
+framestodisplay = int((abf.dataPointsPerMs * (Xsecupperlim * 1000)) / 100) #This is the number of frames
 
+sweepatonce = 1 #number of sweeps to display at once. In testing leave at one for now
 
-sweepNumber=4
+########################
+
+i1, i2 = 0, 1 #defines the number of points. ignore this one
+
 
 abf.setSweep(sweepNumber)
-
-i1, i2 = 0, 1 #defines the number of points
-
-
-framestodisplay = int((abf.dataPointsPerMs * 3000) / 100)
-print(abf.dataPointsPerMs)
-print(abf.dataRate)
 fig, ax = plt.subplots()
 xdata, ydata = [], []
-ln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
+
+if sweepatonce == 1:
+
+    ln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
+else:
+    ln, = [plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')]
+    for x in range(0, sweepatonce):
+        ln.append(plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-'))
+
+
+
 lstframe = 0
 plt.pause(1)
 plt.ylabel(abf.sweepLabelY)
 plt.xlabel(abf.sweepLabelX)
+fig.set_size_inches(10, 8) #sets the figure size in inches
 
 
 def init():
-    ax.set_xlim(0, 3)
+    ax.set_xlim(0, Xsecupperlim)
     ax.set_ylim(-100, 50)
-    plt.figure(figsize=(10, 8))
     return ln,
 
 def update(i):
@@ -68,13 +78,19 @@ def update(i):
             sweepNumber = 0
             abf.setSweep(sweepNumber)
             print(sweepNumber)
-      
+    if sweepatonce > 1:
+        for x in range(0, sweepatonce):
+            ln[x].set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
+            ln[x].set_color(colors[x])    
+        return ln,[]
+    else:   
+        ln.set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
+        ln.set_color(colors[sweepNumber])
+        return ln,
     
-    ln.set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
-    ln.set_color(colors[sweepNumber])
     lstframe = i2
    # print(ani.frame_seq)
-    return ln,
+    
 
 
 
