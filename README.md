@@ -5,6 +5,20 @@ This is a rough script and may need some tweaking to get exactly what you desire
 
 Also included are some side scripts I use to visual ABF data for presentations.
 
->Please note that these scripts are not intended for intense statistic analysis of ABF files
+>Please note that these scripts are not intended for intense statistical analysis of ABF files
+
+### Requirements
+-Python 3.6 or higher
+
+-PyABF
+
+-Numpy
+
+-Matplotlib
+
+-ffmpeg (optional for saving as mp4 
+
+### How to
+The script should function out of the box
   
-TODO:Make a readme
+TODO:finish readme
