@@ -26,7 +26,7 @@ sweepNumberX=4 #this is the first sweep that is printed, change this if needed
 Xsecupperlim = 2 #this is the upper bound of the x axis. try to change this variable and not the others
 framestodisplay = int((abf.dataPointsPerMs * (Xsecupperlim * 1000)) / 100) #This is the number of frames
 pyabf.filter.gaussian(abf, 0.5, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
-sweepatonce = 1 #number of sweeps to display at once. In testing leave at one for now
+sweepatonce = 6 #number of sweeps to display at once. In testing leave at one for now
 displayprev = False
 ########################
 
@@ -57,37 +57,33 @@ plt.ylabel(abf.sweepLabelY)
 plt.xlabel(abf.sweepLabelX)
 fig.set_size_inches(10, 8) #sets the figure size in inches
 if displayprev == True:
-    interations = framestodisplay * (abf.sweepCount - 1)
+    iterations = framestodisplay * (abf.sweepCount - 1)
 else:
-    interations = framestodisplay * (abf.sweepCount - 1)
+    iterations = framestodisplay * (abf.sweepCount - 1)
 prevln = []
 dataX = []
 dataY = []
-    
+tet = plt.text(0.40, -20, 'LAB Data Update 190719', zorder=20, fontsize=23, fontweight='bold', style='italic')    
 def init():
     global sweepNumber
     global cycles
     global ln
     ax.set_xlim(0, Xsecupperlim)
-    ax.set_ylim(-200, 200) #the Y axis limits 
+    ax.set_ylim(-125, 50) #the Y axis limits 
     print('inti')
-    ln.set_color(colors[sweepNumber])
+    
     cycles = 1
     sweepNumber = sweepNumberX
     if sweepatonce > 1:
+        ln[0].set_color(colors[sweepNumber])
         return ln
     else:
+        ln.set_color(colors[sweepNumber])
         return ln,
 
 def update(i):
-    global lstframe, dataX, dataY
-    global abf
-    global sweepNumber
-    global ln
-    global interations
-    global framestodisplay
-    global cycles
-    global prevln
+    global lstframe, dataX, dataY, abf, sweepNumber, ln, iterations, framestodisplay, cycles, prevln
+    
     if cycles > 1:
         frmcount = i - (framestodisplay * (cycles - 1))
         
@@ -132,8 +128,10 @@ def update(i):
             abf.setSweep(x)
             
             ln[x].set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
-            ln[x].set_color(colors[x])
-      
+            ln[x].set_zorder(1)
+            #print(ln[x].get_zorder())
+            ln[x].set_color(colors[x - 1])
+        
         return ln
     else:   
        
@@ -156,11 +154,11 @@ def update(i):
 
 
 ani = animation.FuncAnimation(
-    fig, update, init_func=init, frames=interations, interval=10, blit=True, save_count=1)
+    fig, update, init_func=init, frames=iterations, interval=10, blit=True, save_count=1)
 lstframe = 0
 
 print(ani.frame_seq)
-#writer = FFMpegWriter(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+writer = FFMpegWriter(fps=29, metadata=dict(artist='Me'), bitrate=-1)
 #ani.save("movie.mp4")
 
 
