@@ -26,8 +26,8 @@ sweepNumberX=4 #this is the first sweep that is printed, change this if needed
 Xsecupperlim = 2 #this is the upper bound of the x axis. try to change this variable and not the others
 framestodisplay = int((abf.dataPointsPerMs * (Xsecupperlim * 1000)) / 100) #This is the number of frames
 pyabf.filter.gaussian(abf, 0.5, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
-sweepatonce = 6 #number of sweeps to display at once. In testing leave at one for now
-displayprev = False
+sweepatonce = 1 #number of sweeps to display at once. In testing leave at one for now
+displayprev = False #Previously written sweeps remain on the graph
 ########################
 
 i1, i2 = 0, 1 #defines the number of points. ignore this one
@@ -63,7 +63,7 @@ else:
 prevln = []
 dataX = []
 dataY = []
-tet = plt.text(0.40, -20, 'LAB Data Update 190719', zorder=20, fontsize=23, fontweight='bold', style='italic')    
+ 
 def init():
     global sweepNumber
     global cycles
@@ -128,8 +128,8 @@ def update(i):
             abf.setSweep(x)
             
             ln[x].set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
-            ln[x].set_zorder(1)
-            #print(ln[x].get_zorder())
+            
+            
             ln[x].set_color(colors[x - 1])
         
         return ln
