@@ -26,8 +26,9 @@ sweepNumberX=4 #this is the first sweep that is printed, change this if needed
 Xsecupperlim = 2 #this is the upper bound of the x axis. try to change this variable and not the others
 framestodisplay = int((abf.dataPointsPerMs * (Xsecupperlim * 1000)) / 100) #This is the number of frames
 pyabf.filter.gaussian(abf, 0.5, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
+plotstep = 10
 sweepatonce = 1 #number of sweeps to display at once. In testing leave at one for now
-displayprev = False #Previously written sweeps remain on the graph
+displayprev = True #Previously written sweeps remain on the graph
 ########################
 
 i1, i2 = 0, 1 #defines the number of points. ignore this one
@@ -37,16 +38,16 @@ sweepNumber = sweepNumberX
 fig, ax = plt.subplots()
 if sweepatonce == 1:
     abf.setSweep(sweepNumberX)
-    ln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
+    ln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
     ln.set_markevery(100)
 else:
-    ln, = [plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')]
+    ln, = [plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')]
    
     for x in range(0, sweepatonce):
         
         abf.setSweep(x)
  
-        tmpln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
+        tmpln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
         ln.append(tmpln)
         
 
@@ -96,8 +97,8 @@ def update(i):
         if sweepNumber < (abf.sweepCount - 1):
             
             if displayprev == True:
-                dataX.append(abf.sweepX[i1:i2])
-                dataY.append(abf.sweepY[i1:i2])
+                dataX.append(abf.sweepX[i1:i2:10])
+                dataY.append(abf.sweepY[i1:i2:10])
                 templn, = plt.plot(dataX[cycles - 1], dataY[cycles - 1], "b")
                 templn.set_color(colors[sweepNumber])
                 print(sweepNumber)
@@ -109,14 +110,14 @@ def update(i):
             cycles += 1
             abf.setSweep(sweepNumber)
             i1, i2 = 0, 0
-            ln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
+            ln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
             ln.set_color(colors[sweepNumber])
             print(sweepNumber)
         else:
             sweepNumber = 0
             abf.setSweep(sweepNumber)
             
-            ln, = plt.plot(abf.sweepX[i1:i2], abf.sweepY[i1:i2], 'b-')
+            ln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
             print(sweepNumber)
         
             
@@ -127,7 +128,7 @@ def update(i):
         for x in range(0, sweepatonce):
             abf.setSweep(x)
             
-            ln[x].set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
+            ln[x].set_data(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep])
             
             
             ln[x].set_color(colors[x - 1])
@@ -137,7 +138,7 @@ def update(i):
        
         
         
-        ln.set_data(abf.sweepX[i1:i2], abf.sweepY[i1:i2])
+        ln.set_data(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep])
         ln.set_zorder(20)
        
         

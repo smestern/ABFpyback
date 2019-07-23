@@ -22,11 +22,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ABFplayback.py" />
     <Compile Include="3dplotting.py" />
-    <Compile Include="Plot1traceotherwise gray.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="abfderivative.py" />
+    <Compile Include="ABFplayback.py" />
+    <Compile Include="Plot1traceotherwise gray.py" />
+    <Compile Include="testplayground.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
