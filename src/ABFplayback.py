@@ -21,9 +21,9 @@ cm = plt.get_cmap("Set1") #Changes colour based on sweep number
 colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
 sweepNumberX=4 #this is the first sweep that is printed, change this if needed
 Xsecupperlim = 3 #this is the upper bound of the x axis. try to change this variable and not the others
-frameinterval = 1 
+frameinterval = 1
 plotstep = 100
-framestodisplay = int(((abf.dataPointsPerMs / plotstep) * (Xsecupperlim * 1000)) / (frameinterval)) #This is the number of frames
+framestodisplay = int(((abf.dataPointsPerMs / plotstep) * (Xsecupperlim * 1000)) / (frameinterval * 10)) #This is the number of frames
 pyabf.filter.gaussian(abf, 2, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
 
 sweepatonce = 6 #number of sweeps to display at once. In testing leave at one for now
