@@ -15,19 +15,18 @@ root.withdraw()
 file_path = filedialog.askopenfilename()
 abf = pyabf.ABF(file_path) #If you would prefer you can change file_path to manually point at a specific file
 
-#turn on interactive mode
-# plt.ion()
-
 
 #### EASY SETTINGS ######
 cm = plt.get_cmap("Set1") #Changes colour based on sweep number
 colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
 sweepNumberX=4 #this is the first sweep that is printed, change this if needed
-Xsecupperlim = 2 #this is the upper bound of the x axis. try to change this variable and not the others
-framestodisplay = int((abf.dataPointsPerMs * (Xsecupperlim * 1000)) / 100) #This is the number of frames
-pyabf.filter.gaussian(abf, 0.5, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
-plotstep = 10
-sweepatonce = 1 #number of sweeps to display at once. In testing leave at one for now
+Xsecupperlim = 3 #this is the upper bound of the x axis. try to change this variable and not the others
+frameinterval = 1 
+plotstep = 100
+framestodisplay = int(((abf.dataPointsPerMs / plotstep) * (Xsecupperlim * 1000)) / (frameinterval)) #This is the number of frames
+pyabf.filter.gaussian(abf, 2, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
+
+sweepatonce = 6 #number of sweeps to display at once. In testing leave at one for now
 displayprev = True #Previously written sweeps remain on the graph
 ########################
 
@@ -60,7 +59,7 @@ fig.set_size_inches(10, 8) #sets the figure size in inches
 if displayprev == True:
     iterations = framestodisplay * (abf.sweepCount - 1)
 else:
-    iterations = framestodisplay * (abf.sweepCount - 1)
+    iterations = framestodisplay
 prevln = []
 dataX = []
 dataY = []
@@ -69,6 +68,7 @@ def init():
     global sweepNumber
     global cycles
     global ln
+    fig.canvas.draw()
     ax.set_xlim(0, Xsecupperlim)
     ax.set_ylim(-125, 50) #the Y axis limits 
     print('inti')
@@ -97,8 +97,8 @@ def update(i):
         if sweepNumber < (abf.sweepCount - 1):
             
             if displayprev == True:
-                dataX.append(abf.sweepX[i1:i2:10])
-                dataY.append(abf.sweepY[i1:i2:10])
+                dataX.append(abf.sweepX[i1:i2:plotstep])
+                dataY.append(abf.sweepY[i1:i2:plotstep])
                 templn, = plt.plot(dataX[cycles - 1], dataY[cycles - 1], "b")
                 templn.set_color(colors[sweepNumber])
                 print(sweepNumber)
@@ -145,17 +145,12 @@ def update(i):
         return [ln] + prevln
 
 
-
-        
     
-   
-   # print(ani.frame_seq)
-    
-
-
+print(framestodisplay)
+print(iterations)
 
 ani = animation.FuncAnimation(
-    fig, update, init_func=init, frames=iterations, interval=10, blit=True, save_count=1)
+    fig, update, init_func=init, frames=iterations, interval=frameinterval, blit=True, save_count=1)
 lstframe = 0
 
 print(ani.frame_seq)
