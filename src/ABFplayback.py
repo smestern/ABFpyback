@@ -41,13 +41,15 @@ if sweepatonce == 1:
     ln.set_markevery(100)
 else:
     ln, = [plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')]
-   
+    ann = []
     for x in range(0, sweepatonce):
         
         abf.setSweep(x)
  
         tmpln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
         ln.append(tmpln)
+        #tempann = plt.annotate(x,xy=(abf.sweepX[i2],abf.sweepY[i2]))
+        #ann.append(tempann)
         
 
 cycles = 0
@@ -116,7 +118,7 @@ def update(i):
         else:
             sweepNumber = 0
             abf.setSweep(sweepNumber)
-            
+           
             ln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
             print(sweepNumber)
         
@@ -128,11 +130,13 @@ def update(i):
         for x in range(0, sweepatonce):
             abf.setSweep(x)
             
+            
             ln[x].set_data(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep])
             
             
             ln[x].set_color(colors[x - 1])
-        
+            #ann[x].set_position(xy=(abf.sweepX[i2],abf.sweepY[i2]))
+        #return ln + ann
         return ln
     else:   
        
