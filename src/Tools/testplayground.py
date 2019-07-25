@@ -11,7 +11,7 @@ plt.autoscale(True)
 plt.xlim(1, 1.5)
 
 abf = pyabf.ABF('19712000.abf')
-x, y = doublederivative(abf, 16, 10)
+x, y = derivative(abf, 16, 10)
 plot = []
 tmpln, = plt.plot(x, y, 'b', color='green', label='PRE-PGE2 cell 1')
 
@@ -27,13 +27,13 @@ plt.xlabel(abf.sweepLabelX)
 plt.title("d/dx of Gaba Current (clamped at -40mv)")
 plot.append(tmpln)
 abf = pyabf.ABF('19712002.abf')
-x, y = doublederivative(abf, 19, 10)
+x, y = derivative(abf, 19, 10)
 plot = []
 tmpln, = plt.plot(x, y, 'b', color='red', label='POST-PGE2 cell 1')
 print(integrate(abf, 19, 19,1, 1.15, 1.5))
 plot.append(tmpln)
 abf = pyabf.ABF('19709026.abf')
-x, y = doublederivative(abf, 12, 10)
+x, y = derivative(abf, 12, 10)
 plot = []
 tmpln, = plt.plot(x, y, 'b', color='blue', label='PRE-PGE2 cell 2')
 

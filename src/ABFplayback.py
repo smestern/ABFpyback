@@ -20,13 +20,13 @@ abf = pyabf.ABF(file_path) #If you would prefer you can change file_path to manu
 cm = plt.get_cmap("Set1") #Changes colour based on sweep number
 colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
 sweepNumberX=4 #this is the first sweep that is printed, change this if needed
-Xsecupperlim = 3 #this is the upper bound of the x axis. try to change this variable and not the others
+Xsecupperlim = 2 #this is the upper bound of the x axis. try to change this variable and not the others
 frameinterval = 1
-plotstep = 100
-framestodisplay = int(((abf.dataPointsPerMs / plotstep) * (Xsecupperlim * 1000)) / (frameinterval * 10)) #This is the number of frames
-pyabf.filter.gaussian(abf, 2, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
+plotstep = 50
+framestodisplay = int(((abf.dataPointsPerMs / plotstep) * (Xsecupperlim * 1000)) / (frameinterval)) #This is the number of frames
+pyabf.filter.gaussian(abf, 0, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
 
-sweepatonce = 6 #number of sweeps to display at once. In testing leave at one for now
+sweepatonce = 1 #number of sweeps to display at once. In testing leave at one for now
 displayprev = True #Previously written sweeps remain on the graph
 ########################
 
@@ -40,18 +40,21 @@ if sweepatonce == 1:
     ln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
     ln.set_markevery(100)
 else:
+    displayprev = False
     ln, = [plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')]
-    ann = []
+    #ann = []
+    
     for x in range(0, sweepatonce):
         
         abf.setSweep(x)
  
         tmpln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
         ln.append(tmpln)
-        #tempann = plt.annotate(x,xy=(abf.sweepX[i2],abf.sweepY[i2]))
+        #tempann = plt.annotate(str(x),xy=(abf.sweepX[i2],abf.sweepY[i2]),fontsize="16")
         #ann.append(tempann)
         
 
+#plt.text(0.55, -60,"ABFpyback", fontsize="80", weight='bold', style='italic')
 cycles = 0
 lstframe = 0
 plt.pause(1)
@@ -73,7 +76,7 @@ def init():
     fig.canvas.draw()
     ax.set_xlim(0, Xsecupperlim)
     ax.set_ylim(-125, 50) #the Y axis limits 
-    print('inti')
+    print('init')
     
     cycles = 1
     sweepNumber = sweepNumberX
@@ -150,8 +153,8 @@ def update(i):
 
 
     
-print(framestodisplay)
-print(iterations)
+print("frames: " + str(framestodisplay))
+print("FramesI " + str(iterations))
 
 ani = animation.FuncAnimation(
     fig, update, init_func=init, frames=iterations, interval=frameinterval, blit=True, save_count=1)
