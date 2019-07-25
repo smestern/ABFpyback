@@ -6,7 +6,8 @@ Python Script to allow 'replay' or live-playback of AXON binary files (.abf) gen
 This is a rough script and may need some tweaking to get exactly what you desire.
 
 Also included are some side scripts I use to visualize ABF data for presentations.
-  this includes:
+  
+  This includes:
   #### 3dplotting.py
   Inline plotting of sweeps based on sweep numbers. Fully interactive.  
   ![example 3d plot](https://i.imgur.com/pEoVkDb.png "3d plot")
