@@ -29,10 +29,12 @@ Also included are some side scripts I use to visualize ABF data for presentation
 -ffmpeg (optional for saving as mp4)
 
 ### How to
-The script should function out of the box
-Simply execute the script in your favourite python enviroment.
-  Aside from abfderivative, the scripts are stand alone and have no callable functions (although this may be added in the future). Documention is provided so that you can customize to get exactly what you desire.
-  To utilize ffmpeg for export. The ffmpeg.exe must be in the same folder as the python script. 
+The script should function out of the box.
+
+Simply execute the script in your favourite python enviroment.  
+Aside from abfderivative, the scripts are stand alone and have no callable functions (although this may be added in the future).   Documention is provided so that you can customize to get exactly what you desire.
+  
+  To utilize ffmpeg for export, place ffmpeg.exe must be in the same folder as the python script. 
   
 ### Todo
  -Full tutorial
