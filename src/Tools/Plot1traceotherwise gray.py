@@ -14,7 +14,7 @@ file_path = filedialog.askopenfilename()
 abf = pyabf.ABF(file_path)
 
 plt.figure(figsize=(12, 8))
-
+plt.style.use('ggplot')
 
 plt.autoscale(False)
 plt.xlim(0, 2)
