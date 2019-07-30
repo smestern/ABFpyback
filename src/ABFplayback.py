@@ -18,14 +18,16 @@ abf = pyabf.ABF(file_path) #If you would prefer you can change file_path to manu
 
 #### EASY SETTINGS ######
 cm = plt.get_cmap("Set1") #Changes colour based on sweep number
-colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
+colors = [cm(x/abf.sweepCount * 2) for x in abf.sweepList]
 sweepNumberX=4 #this is the first sweep that is printed, change this if needed
 Xsecupperlim = 2 #this is the upper bound of the x axis. try to change this variable and not the others
-frameinterval = 1
-plotstep = 50
-framestodisplay = int(((abf.dataPointsPerMs / plotstep) * (Xsecupperlim * 1000)) / (frameinterval)) #This is the number of frames
+fps = 30 #FPS Module. Should render properly
+speedmult = 1 #New speed multiplier, the higher the number - > slower and vice versa
+frameinterval = 1 / (fps / 1000)
+plotstep = 10 #The amount of data ploted between points. Increase this number to increase performance
+framestodisplay = int(((Xsecupperlim * 1000) + 100) * (1 / frameinterval)) * speedmult #This is the number of frames
 pyabf.filter.gaussian(abf, 0, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
-
+lstframe = (abf.dataPointsPerMs * (frameinterval)) / speedmult
 sweepatonce = 1 #number of sweeps to display at once. In testing leave at one for now
 displayprev = True #Previously written sweeps remain on the graph
 ########################
@@ -38,7 +40,7 @@ fig, ax = plt.subplots()
 if sweepatonce == 1:
     abf.setSweep(sweepNumberX)
     ln, = plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')
-    ln.set_markevery(100)
+   
 else:
     displayprev = False
     ln, = [plt.plot(abf.sweepX[i1:i2:plotstep], abf.sweepY[i1:i2:plotstep], 'b-')]
@@ -54,9 +56,8 @@ else:
         #ann.append(tempann)
         
 
-#plt.text(0.55, -60,"ABFpyback", fontsize="80", weight='bold', style='italic')
 cycles = 0
-lstframe = 0
+
 plt.pause(1)
 plt.ylabel(abf.sweepLabelY)
 plt.xlabel(abf.sweepLabelX)
@@ -68,7 +69,8 @@ else:
 prevln = []
 dataX = []
 dataY = []
- 
+
+
 def init():
     global sweepNumber
     global cycles
@@ -79,7 +81,7 @@ def init():
     print('init')
     
     cycles = 1
-    sweepNumber = sweepNumberX
+    
     if sweepatonce > 1:
         ln[0].set_color(colors[sweepNumber])
         return ln
@@ -95,8 +97,8 @@ def update(i):
         
     else: 
         frmcount = i
-    i1, i2 = 0, (frmcount * 100) #This is the data that is drawn. Essentially this mean it prints the line data between 0 (origin) and the frame (i) * 100. So frame one it prints 0 - 100ms, frame 2 is 0 - 200ms
-    lstframe = i2
+    i1, i2 = 0, int(frmcount * lstframe) #This is the data that is drawn. Essentially this mean it prints the line data between 0 (origin) and the frame (i) * 100. So frame one it prints 0 - 100ms, frame 2 is 0 - 200ms
+   
     
     if i >= ((framestodisplay * cycles) - 1) and sweepatonce < 2 :
         if sweepNumber < (abf.sweepCount - 1):
@@ -154,11 +156,11 @@ def update(i):
 
     
 print("frames: " + str(framestodisplay))
-print("FramesI " + str(iterations))
+print("FramesI:  " + str(iterations))
 
 ani = animation.FuncAnimation(
     fig, update, init_func=init, frames=iterations, interval=frameinterval, blit=True, save_count=1)
-lstframe = 0
+
 
 print(ani.frame_seq)
 writer = FFMpegWriter(fps=29, metadata=dict(artist='Me'), bitrate=-1)
