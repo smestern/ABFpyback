@@ -18,16 +18,16 @@ abf = pyabf.ABF(file_path) #If you would prefer you can change file_path to manu
 
 #### EASY SETTINGS ######
 cm = plt.get_cmap("Set1") #Changes colour based on sweep number
-colors = [cm(x/abf.sweepCount * 1.25) for x in abf.sweepList]
+colors = [cm(x/abf.sweepCount * 2) for x in abf.sweepList]
 sweepNumberX=4 #this is the first sweep that is printed, change this if needed
 Xsecupperlim = 2 #this is the upper bound of the x axis. try to change this variable and not the others
-speedmult = 1
-frameinterval = speedmult * 33
-
-plotstep = 100
-framestodisplay = int(((Xsecupperlim * 1000) + 100) * (1/frameinterval)) #This is the number of frames
-pyabf.filter.gaussian(abf, 10, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
-lstframe = abf.dataPointsPerMs * (frameinterval)
+fps = 30 #FPS Module. Should render properly
+speedmult = 1 #New speed multiplier, the higher the number - > slower and vice versa
+frameinterval = 1 / (fps / 1000)
+plotstep = 10 #The amount of data ploted between points. Increase this number to increase performance
+framestodisplay = int(((Xsecupperlim * 1000) + 100) * (1 / frameinterval)) * speedmult #This is the number of frames
+pyabf.filter.gaussian(abf, 0, 0) #Removes noise. Essential if you want to plot large amounts of data at once. for one line, you are probably okay setting the 2nd value to 0.
+lstframe = (abf.dataPointsPerMs * (frameinterval)) / speedmult
 sweepatonce = 1 #number of sweeps to display at once. In testing leave at one for now
 displayprev = True #Previously written sweeps remain on the graph
 ########################
@@ -81,7 +81,7 @@ def init():
     print('init')
     
     cycles = 1
-    sweepNumber = sweepNumberX
+    
     if sweepatonce > 1:
         ln[0].set_color(colors[sweepNumber])
         return ln
@@ -156,7 +156,7 @@ def update(i):
 
     
 print("frames: " + str(framestodisplay))
-print("FramesI " + str(iterations))
+print("FramesI:  " + str(iterations))
 
 ani = animation.FuncAnimation(
     fig, update, init_func=init, frames=iterations, interval=frameinterval, blit=True, save_count=1)
@@ -164,7 +164,7 @@ ani = animation.FuncAnimation(
 
 print(ani.frame_seq)
 writer = FFMpegWriter(fps=29, metadata=dict(artist='Me'), bitrate=-1)
-ani.save("movie.mp4")
+#ani.save("movie.mp4")
 
 
 plt.show()
