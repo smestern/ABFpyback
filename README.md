@@ -12,6 +12,7 @@ Also included are some side scripts I use to visualize ABF data for presentation
   Inline plotting of sweeps based on sweep numbers. Fully interactive.  
   ![example 3d plot](https://i.imgur.com/pEoVkDb.png "3d plot")
   ### abfderivative.py
+  **Note: This functionality is now built into pyABF, and the script is no longer needed**
   Callable functions that provide the derivative, double derivative, and integral of the abf curve. (See: https://github.com/smestern/abfderivative)
   ![example Dx](https://i.imgur.com/snbPCru.png "example dx")
   
