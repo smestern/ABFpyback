@@ -28,7 +28,7 @@ for sweepNumber in abf.sweepList:
     if sweepNumber == sweepdsply:
         plt.plot(dataX, dataY, color='b', alpha=0)
     else:
-        plt.plot(dataX, dataY, color='0.75', alpha=0.25)
+        plt.plot(dataX, dataY, color='', alpha=0.25)
 
 
 abf.setSweep(sweepdsply)
